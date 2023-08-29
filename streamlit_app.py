@@ -72,5 +72,7 @@ def main():
         df = pd.DataFrame(results)
         st.table(df)
 
+        st.map(df.dropna(subset=['Latitude', 'Longitude']))
+
 if __name__ == "__main__":
     main()
