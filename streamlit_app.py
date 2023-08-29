@@ -87,7 +87,7 @@ def main():
     st.write("For the 120 hours (5.00 days) from 1 PM CDT MON AUG 28 to 1 PM CDT SAT SEP 02")
 
     # Input box to accept a list of addresses
-    addresses = st.text_area("Enter a list of addresses (each address on a separate line)")
+    addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 50.")
 
     if st.button("Process Addresses"):
         address_list = addresses.split("\n")
