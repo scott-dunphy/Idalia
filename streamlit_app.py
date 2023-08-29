@@ -72,7 +72,13 @@ def main():
         df = pd.DataFrame(results)
         st.table(df)
 
-        st.map(df.dropna(subset=['Latitude', 'Longitude']))
+        # Drop NA values and rename columns for st.map compatibility
+        df_map = df.dropna(subset=['Latitude', 'Longitude'])
+        df_map = df_map.rename(columns={"Latitude": "lat", "Longitude": "lon"})
+
+        # Plot the successful geocoded addresses on a map
+        st.map(df_map)
+
 
 if __name__ == "__main__":
     main()
