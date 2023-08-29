@@ -82,7 +82,7 @@ def plot_map_with_hover(df):
 
 
 def main():
-    st.title("Hurricane Idalia")
+    st.title("Tropical Storm Idalia")
     st.header("Hurricane-Force Wind Speed Probabilities")
     st.write("For the 120 hours (5.00 days) from 1 PM CDT MON AUG 28 to 1 PM CDT SAT SEP 02")
 
