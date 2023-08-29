@@ -8,6 +8,7 @@ from shapely.geometry import Point
 import io
 import requests
 import pandas as pd
+import pydeck as pdk
 
 def check_point(lat, lon):
 
@@ -39,6 +40,46 @@ def address_to_lat_lon(address):
         return float(lat), float(lon)
     else:
         return None, None
+
+def plot_map_with_hover(df):
+    # Prepare data for pydeck chart
+    view_state = pdk.ViewState(
+        latitude=df["Latitude"].mean(),
+        longitude=df["Longitude"].mean(),
+        zoom=4
+    )
+
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        df,
+        pickable=True,
+        opacity=0.6,
+        stroked=True,
+        filled=True,
+        radius_scale=6,
+        radius_min_pixels=10,
+        radius_max_pixels=100,
+        line_width_min_pixels=1,
+        get_position=["Longitude", "Latitude"],
+        get_radius=1000,  
+        get_fill_color=[255, 0, 0],
+        get_line_color=[0, 0, 0],
+    )
+
+    # Customize tooltip to show the property address and probability
+    tooltip = {
+        "html": "<b>Address:</b> {Address} <br> <b>Probability:</b> {Result}",
+        "style": {"backgroundColor": "steelblue", "color": "white"},
+    }
+
+    r = pdk.Deck(
+        layers=[layer],
+        initial_view_state=view_state,
+        tooltip=tooltip,
+    )
+
+    st.pydeck_chart(r)
+
 
 def main():
     st.title("Geospatial Point Checker")
@@ -72,12 +113,9 @@ def main():
         df = pd.DataFrame(results)
         st.table(df)
 
-        # Drop NA values and rename columns for st.map compatibility
-        df_map = df.dropna(subset=['Latitude', 'Longitude'])
-        df_map = df_map.rename(columns={"Latitude": "lat", "Longitude": "lon"})
+        plot_map_with_hover(df)
 
-        # Plot the successful geocoded addresses on a map
-        st.map(df_map)
+
 
 
 if __name__ == "__main__":
