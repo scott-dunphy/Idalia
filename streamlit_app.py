@@ -42,6 +42,9 @@ def address_to_lat_lon(address):
         return None, None
 
 def plot_map_with_hover(df):
+    # Exclude assets with missing lat/lon values
+    df = df.dropna(subset=['Latitude', 'Longitude'])
+
     # Prepare data for pydeck chart
     view_state = pdk.ViewState(
         latitude=df["Latitude"].mean(),
@@ -57,12 +60,12 @@ def plot_map_with_hover(df):
         stroked=True,
         filled=True,
         radius_scale=6,
-        radius_min_pixels=5,
+        radius_min_pixels=10,
         radius_max_pixels=100,
         line_width_min_pixels=1,
         get_position=["Longitude", "Latitude"],
-        get_radius=1000,  
-        get_fill_color=[255, 0, 0],
+        get_radius=1000,
+        get_fill_color=["R", "G", "B"],  # Assuming you have R, G, B columns for colors
         get_line_color=[0, 0, 0],
     )
 
@@ -79,6 +82,7 @@ def plot_map_with_hover(df):
     )
 
     st.pydeck_chart(r)
+
 
 
 def main():
