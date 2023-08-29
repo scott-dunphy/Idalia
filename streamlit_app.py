@@ -126,6 +126,17 @@ It is important for users to realize that wind speed probabilities that might se
 
         st.write("Source: https://www.nhc.noaa.gov/refresh/graphics_at5+shtml/213151.shtml?hwind120#wcontents")
 
+st.markdown(
+        """
+        ---
+        **Disclaimer:** 
+        - The data presented in this application is based on sources believed to be accurate. However, the creator does not guarantee the accuracy of this data. 
+        - The information provided is for informational purposes only and should not be solely relied upon. Users are advised to conduct their own independent research and due diligence.
+        - Forecasts and data may change at any time and might not necessarily be reflected in this application.
+        ---
+        """
+    )
+
 
 
 
