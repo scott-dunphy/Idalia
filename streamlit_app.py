@@ -23,7 +23,7 @@ def check_point(lat, lon):
     if not contains_point.empty:
         return contains_point['PERCENTAGE'].values[0]
     else:
-        return 'Fall Outside the Path'
+        return 'Falls outside the projection'
 
 # Function to extract lat and lon from OpenStreetMap Nominatim API
 def address_to_lat_lon(address):
@@ -101,14 +101,14 @@ def main():
                     "Address": address,
                     "Latitude": lat,
                     "Longitude": lon,
-                    "Result": result
+                    "Probability": result
                 })
             else:
                 results.append({
                     "Address": address,
                     "Latitude": "N/A",
                     "Longitude": "N/A",
-                    "Result": "Unable to fetch coordinates"
+                    "Probability": "Unable to fetch coordinates"
                 })
 
         # Display the results in a table
