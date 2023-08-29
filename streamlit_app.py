@@ -43,40 +43,34 @@ def address_to_lat_lon(address):
 def main():
     st.title("Geospatial Point Checker")
 
-    uploaded_file = st.file_uploader("Upload a zip containing shapefiles", type=["zip"])
+    # Input box to accept a list of addresses
+    addresses = st.text_area("Enter a list of addresses (separated by carriage returns)")
 
-    if uploaded_file is not None:
-        gdf = zip_to_gdf(uploaded_file)
-        st.write("Shapefiles loaded successfully!")
+    if st.button("Process Addresses"):
+        address_list = addresses.split("\n")
+        results = []
 
-        # Input box to accept a list of addresses
-        addresses = st.text_area("Enter a list of addresses (separated by carriage returns)")
+        for address in address_list:
+            lat, lon = address_to_lat_lon(address)
+            if lat and lon:
+                result = check_point(gdf, lat, lon)
+                results.append({
+                    "Address": address,
+                    "Latitude": lat,
+                    "Longitude": lon,
+                    "Result": result
+                })
+            else:
+                results.append({
+                    "Address": address,
+                    "Latitude": "N/A",
+                    "Longitude": "N/A",
+                    "Result": "Unable to fetch coordinates"
+                })
 
-        if st.button("Process Addresses"):
-            address_list = addresses.split("\n")
-            results = []
-
-            for address in address_list:
-                lat, lon = address_to_lat_lon(address)
-                if lat and lon:
-                    result = check_point(gdf, lat, lon)
-                    results.append({
-                        "Address": address,
-                        "Latitude": lat,
-                        "Longitude": lon,
-                        "Result": result
-                    })
-                else:
-                    results.append({
-                        "Address": address,
-                        "Latitude": "N/A",
-                        "Longitude": "N/A",
-                        "Result": "Unable to fetch coordinates"
-                    })
-
-            # Display the results in a table
-            df = pd.DataFrame(results)
-            st.table(df)
+        # Display the results in a table
+        df = pd.DataFrame(results)
+        st.table(df)
 
 if __name__ == "__main__":
     main()
