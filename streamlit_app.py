@@ -89,7 +89,7 @@ def plot_map_with_hover(df):
 def main():
     st.title("Hurricane Idalia")
     st.header("Hurricane-Force Wind Speed Probabilities")
-    st.write("For the 120 hours (5.00 days) from 1 AM CDT TUE AUG 29 to 1 AM CDT SUN SEP 03")
+    st.write("For the 120 hours (5.00 days) from 8 AM EDT TUE AUG 29 to 8 AM EDT SUN SEP 03")
 
     # Input box to accept a list of addresses
     addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 50.")
