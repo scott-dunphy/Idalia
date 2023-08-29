@@ -50,7 +50,7 @@ def main():
         address_list = addresses.split("\n")
         results = []
 
-        for address in address_list:
+        for address in address_list[:50]:
             lat, lon = address_to_lat_lon(address)
             if lat and lon:
                 result = check_point(lat, lon)
