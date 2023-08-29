@@ -71,7 +71,7 @@ def plot_map_with_hover(df):
 
     # Customize tooltip to show the property address and probability
     tooltip = {
-        "html": "<b>Address:</b> {Address} <br> <b>Probability:</b> {Result}",
+        "html": "<b>Address:</b> {Address} <br> <b>Probability:</b> {Probability}",
         "style": {"backgroundColor": "steelblue", "color": "white"},
     }
 
