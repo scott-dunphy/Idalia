@@ -9,7 +9,7 @@ import io
 import requests
 import pandas as pd
 
-def check_point(gdf, lat, lon):
+def check_point(lat, lon):
 
     # Load the GeoDataFrame from the pickle file
     gdf = pd.read_pickle('geo_dataframe.pkl')
@@ -53,7 +53,7 @@ def main():
         for address in address_list:
             lat, lon = address_to_lat_lon(address)
             if lat and lon:
-                result = check_point(gdf, lat, lon)
+                result = check_point(lat, lon)
                 results.append({
                     "Address": address,
                     "Latitude": lat,
