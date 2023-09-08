@@ -10,10 +10,35 @@ import requests
 import pandas as pd
 import pydeck as pdk
 
+def download_and_convert_to_gdf(url):
+    """
+    Download a shapefile from the given URL, unzip it, and convert it to a GeoDataFrame.
+    """
+    # Download the ZIP file
+    r = requests.get(url)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    z.extractall(path="tmp_shapefile")
+
+    # Find the .shp file in the extracted files
+    for filename in os.listdir("tmp_shapefile"):
+        if filename.endswith(".shp"):
+            shapefile_path = os.path.join("tmp_shapefile", filename)
+            break
+
+    # Load the shapefile into a GeoDataFrame
+    gdf = gpd.read_file(shapefile_path)
+
+    # Clean up the temporary directory
+    for filename in os.listdir("tmp_shapefile"):
+        os.remove(os.path.join("tmp_shapefile", filename))
+    os.rmdir("tmp_shapefile")
+
+    return gdf
+    
 def check_point(lat, lon):
 
-    # Load the GeoDataFrame from the pickle file
-    gdf = pd.read_pickle('geo_dataframe.pkl')
+    # Load the GeoDataFrame from NOAA
+    gdf = download_and_convert_to_gdf("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip")
   
     point = Point(lon, lat)
     
