@@ -117,7 +117,6 @@ def plot_map_with_hover(df):
     st.pydeck_chart(r)
 
 
-
 def main():
     st.title("Real Estate Hurricane Risk")
     st.header("Hurricane-Force Wind Speed Probabilities")
@@ -129,8 +128,8 @@ def main():
     if st.button("Process Addresses"):
         address_list = addresses.split("\n")
         results = []
-        
-        knot_values = ["39knt", "50knt", "64knt"]
+
+        knot_values = ["34knt", "50knt", "64knt"]
 
         for address in address_list[:50]:
             lat, lon = address_to_lat_lon(address)
@@ -139,7 +138,7 @@ def main():
                 "Latitude": lat if lat else "N/A",
                 "Longitude": lon if lon else "N/A"
             }
-            
+
             if lat and lon:
                 for knot in knot_values:
                     probability = check_point(lat, lon, knot)
@@ -147,7 +146,7 @@ def main():
             else:
                 for knot in knot_values:
                     result_dict[f"Probability_{knot}"] = "Unable to fetch coordinates"
-                
+
             results.append(result_dict)
 
         # Display the results in a table
