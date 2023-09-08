@@ -151,7 +151,7 @@ def main():
                                     'Probability_34knt':'Tropical Storm Force (>= 39mph)',
                                     'Probability_50knt':'>= 58 mph',
                                     'Probability_64knt':'Hurricane Force (>= 74 mph)'
-            }
+            }, inplace=True)
             results.append(result_dict)
 
         # Display the results in a table
