@@ -133,7 +133,7 @@ def main():
         for address in address_list[:50]:
             lat, lon = address_to_lat_lon(address)
             if lat and lon:
-                result = check_point(lat, lon, "39knt")
+                result = check_point(lat, lon, "34knt")
                 results.append({
                     "Address": address,
                     "Latitude": lat,
