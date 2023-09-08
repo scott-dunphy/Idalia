@@ -129,24 +129,26 @@ def main():
     if st.button("Process Addresses"):
         address_list = addresses.split("\n")
         results = []
+        
+        knot_values = ["39knt", "50knt", "64knt"]
 
         for address in address_list[:50]:
             lat, lon = address_to_lat_lon(address)
+            result_dict = {
+                "Address": address,
+                "Latitude": lat if lat else "N/A",
+                "Longitude": lon if lon else "N/A"
+            }
+            
             if lat and lon:
-                result = check_point(lat, lon, "34knt")
-                results.append({
-                    "Address": address,
-                    "Latitude": lat,
-                    "Longitude": lon,
-                    "Probability": result
-                })
+                for knot in knot_values:
+                    probability = check_point(lat, lon, knot)
+                    result_dict[f"Probability_{knot}"] = probability
             else:
-                results.append({
-                    "Address": address,
-                    "Latitude": "N/A",
-                    "Longitude": "N/A",
-                    "Probability": "Unable to fetch coordinates"
-                })
+                for knot in knot_values:
+                    result_dict[f"Probability_{knot}"] = "Unable to fetch coordinates"
+                
+            results.append(result_dict)
 
         # Display the results in a table
         df = pd.DataFrame(results)
