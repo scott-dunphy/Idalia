@@ -20,10 +20,10 @@ def download_and_convert_to_gdf(url):
     z = zipfile.ZipFile(io.BytesIO(r.content))
     z.extractall(path="tmp_shapefile")
 
-    # Find the .shp file in the extracted files containing "64knt"
+    # Find the .shp file in the extracted files containing "64knt" for 64 knots (Hurricane Wind Speed)
     shapefile_path = None
     for filename in os.listdir("tmp_shapefile"):
-        if filename.endswith(".shp") and "34knt" in filename:
+        if filename.endswith(".shp") and "64knt" in filename:
             shapefile_path = os.path.join("tmp_shapefile", filename)
             break
 
@@ -119,9 +119,9 @@ def plot_map_with_hover(df):
 
 
 def main():
-    st.title("Hurricane Idalia")
+    st.title("Real Estate Hurricane Risk")
     st.header("Hurricane-Force Wind Speed Probabilities")
-    st.write("For the 120 hours (5.00 days) from 2 AM EDT WED AUG 30 to 2 AM EDT MON SEP 04")
+    st.write("Five Day Forecast")
 
     # Input box to accept a list of addresses
     addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 50.")
@@ -161,7 +161,7 @@ def main():
 It is important for users to realize that wind speed probabilities that might seem relatively small at their location might still be quite significant, since they indicate that there is a chance that a damaging or even extreme event could occur that warrants preparations to protect lives and property.
 """)
 
-        st.write("Source: https://www.nhc.noaa.gov/refresh/graphics_at5+shtml/213151.shtml?hwind120#wcontents")
+        st.write("Source: https://www.nhc.noaa.gov")
 
         st.markdown(
                 """
