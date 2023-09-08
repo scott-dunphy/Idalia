@@ -10,7 +10,7 @@ import requests
 import pandas as pd
 import pydeck as pdk
 
-def download_and_convert_to_gdf(url):
+def download_and_convert_to_gdf(url, knots):
     """
     Download a shapefile from the given URL, unzip it, and convert it to a GeoDataFrame.
     Only processes shapefiles containing the text "64knt".
@@ -23,7 +23,7 @@ def download_and_convert_to_gdf(url):
     # Find the .shp file in the extracted files containing "64knt" for 64 knots (Hurricane Wind Speed)
     shapefile_path = None
     for filename in os.listdir("tmp_shapefile"):
-        if filename.endswith(".shp") and "64knt" in filename:
+        if filename.endswith(".shp") and knots in filename:
             shapefile_path = os.path.join("tmp_shapefile", filename)
             break
 
@@ -42,10 +42,10 @@ def download_and_convert_to_gdf(url):
     return gdf
 
     
-def check_point(lat, lon):
+def check_point(lat, lon, knots):
 
     # Load the GeoDataFrame from NOAA
-    gdf = download_and_convert_to_gdf("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip")
+    gdf = download_and_convert_to_gdf("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip", knots)
   
     point = Point(lon, lat)
     
@@ -133,7 +133,7 @@ def main():
         for address in address_list[:50]:
             lat, lon = address_to_lat_lon(address)
             if lat and lon:
-                result = check_point(lat, lon)
+                result = check_point(lat, lon, "64knt")
                 results.append({
                     "Address": address,
                     "Latitude": lat,
