@@ -23,7 +23,7 @@ def download_and_convert_to_gdf(url):
     # Find the .shp file in the extracted files containing "64knt"
     shapefile_path = None
     for filename in os.listdir("tmp_shapefile"):
-        if filename.endswith(".shp") and "64knt" in filename:
+        if filename.endswith(".shp") and "34knt" in filename:
             shapefile_path = os.path.join("tmp_shapefile", filename)
             break
 
