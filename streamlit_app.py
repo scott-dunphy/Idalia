@@ -13,19 +13,25 @@ import pydeck as pdk
 def download_and_convert_to_gdf(url):
     """
     Download a shapefile from the given URL, unzip it, and convert it to a GeoDataFrame.
+    Only processes shapefiles containing the text "64knt".
     """
     # Download the ZIP file
     r = requests.get(url)
     z = zipfile.ZipFile(io.BytesIO(r.content))
     z.extractall(path="tmp_shapefile")
 
-    # Find the .shp file in the extracted files
+    # Find the .shp file in the extracted files containing "64knt"
+    shapefile_path = None
     for filename in os.listdir("tmp_shapefile"):
-        if filename.endswith(".shp"):
+        if filename.endswith(".shp") and "64knt" in filename:
             shapefile_path = os.path.join("tmp_shapefile", filename)
             break
 
-    # Load the shapefile into a GeoDataFrame
+    # If no matching .shp file was found, return an empty GeoDataFrame
+    if shapefile_path is None:
+        return gpd.GeoDataFrame()
+
+    # Load the matching shapefile into a GeoDataFrame
     gdf = gpd.read_file(shapefile_path)
 
     # Clean up the temporary directory
@@ -34,6 +40,7 @@ def download_and_convert_to_gdf(url):
     os.rmdir("tmp_shapefile")
 
     return gdf
+
     
 def check_point(lat, lon):
 
