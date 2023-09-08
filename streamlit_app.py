@@ -147,15 +147,16 @@ def main():
                 for knot in knot_values:
                     result_dict[f"Probability_{knot}"] = "Unable to fetch coordinates"
 
-            results.rename(columns={
-                                    'Probability_34knt':'Tropical Storm Force (>= 39mph)',
-                                    'Probability_50knt':'>= 58 mph',
-                                    'Probability_64knt':'Hurricane Force (>= 74 mph)'
-            }, inplace=True)
+            
             results.append(result_dict)
 
         # Display the results in a table
         df = pd.DataFrame(results)
+        df.rename(columns={
+                            'Probability_34knt':'Tropical Storm Force (>= 39mph)',
+                            'Probability_50knt':'>= 58 mph',
+                            'Probability_64knt':'Hurricane Force (>= 74 mph)'
+            }, inplace=True)
         st.table(df)
 
         plot_map_with_hover(df)
