@@ -119,7 +119,7 @@ def plot_map_with_hover(df):
     "html": """
     <b>Address:</b> {Address} <br>
     <b>Tropical Storm Force (>= 39mph):</b> {Tropical Storm Force (>= 39mph)} <br>
-    <b>>= 58 mph:</b> {>= 58 mph} <br>
+    <b>Severe Tropical Storm (>= 58 mph):</b> {Severe Tropical Storm (>= 58 mph)} <br>
     <b>Hurricane Force (>= 74 mph):</b> {Hurricane Force (>= 74 mph)}
     """,
     "style": {"backgroundColor": "steelblue", "color": "white"},
@@ -174,7 +174,7 @@ def main():
         df = pd.DataFrame(results)
         df.rename(columns={
                             'Probability_34knt':'Tropical Storm Force (>= 39mph)',
-                            'Probability_50knt':'>= 58 mph',
+                            'Probability_50knt':'Severe Tropical Storm (>= 58 mph)',
                             'Probability_64knt':'Hurricane Force (>= 74 mph)'
             }, inplace=True)
         st.table(df)
