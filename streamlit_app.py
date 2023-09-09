@@ -76,7 +76,13 @@ def address_to_lat_lon(address):
 def plot_map_with_hover(df):
     # Exclude assets with missing lat/lon values
     df = df.dropna(subset=['Latitude', 'Longitude'])
-    df = df.loc[(df.Latitude != 'N/A') & (df.Longitude != 'N/A')]
+    df = df[df.Latitude != 'N/A']
+    df = df[df.Longitude != 'N/A']
+
+    # If there's no valid data left, just return
+    if df.empty:
+        st.warning("No valid coordinates to plot on the map.")
+        return
 
     # Prepare data for pydeck chart
     view_state = pdk.ViewState(
@@ -115,6 +121,7 @@ def plot_map_with_hover(df):
     )
 
     st.pydeck_chart(r)
+
 
 
 def main():
