@@ -51,7 +51,7 @@ def download_and_convert_to_gdf(url, knots):
     return gdf
 
     
-def check_point(lat, lon, knots):
+def check_point(lat, lon, knots, gdfs):
 
     gdf = gdfs[knots]
     point = Point(lon, lat)
@@ -138,6 +138,8 @@ def main():
     addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 100.")
 
     if st.button("Process Addresses"):
+        gdfs = load_all_shapefiles("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip")
+        
         address_list = addresses.split("\n")
         results = []
 
@@ -153,7 +155,7 @@ def main():
 
             if lat and lon:
                 for knot in knot_values:
-                    probability = check_point(lat, lon, knot)
+                    probability = check_point(lat, lon, knot, gdfs)
                     result_dict[f"Probability_{knot}"] = probability
             else:
                 for knot in knot_values:
