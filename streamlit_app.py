@@ -9,6 +9,7 @@ import io
 import requests
 import pandas as pd
 import pydeck as pdk
+import base64
 
 def download_and_convert_to_gdf(url, knots):
     """
@@ -130,7 +131,7 @@ def main():
     st.write("Five Day Forecast")
 
     # Input box to accept a list of addresses
-    addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 50.")
+    addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 100.")
 
     if st.button("Process Addresses"):
         address_list = addresses.split("\n")
@@ -138,7 +139,7 @@ def main():
 
         knot_values = ["34knt", "50knt", "64knt"]
 
-        for address in address_list[:50]:
+        for address in address_list[:100]:
             lat, lon = address_to_lat_lon(address)
             result_dict = {
                 "Address": address,
@@ -165,6 +166,15 @@ def main():
                             'Probability_64knt':'Hurricane Force (>= 74 mph)'
             }, inplace=True)
         st.table(df)
+
+        # Button to download data as Excel file
+        towrite = io.BytesIO()
+        df.to_excel(towrite, index=False, engine='openpyxl') 
+        towrite.seek(0)
+        b64 = base64.b64encode(towrite.read()).decode()
+        link = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="hurricane_data.xlsx">Download to Excel</a>'
+        st.markdown(link, unsafe_allow_html=True)
+        
 
         plot_map_with_hover(df)
 
