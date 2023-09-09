@@ -11,6 +11,14 @@ import pandas as pd
 import pydeck as pdk
 import base64
 
+def load_all_shapefiles(url):
+    knot_values = ["34knt", "50knt", "64knt"]
+    gdfs = {}
+    for knot in knot_values:
+        gdfs[knot] = download_and_convert_to_gdf(url, knot)
+    return gdfs
+
+
 def download_and_convert_to_gdf(url, knots):
     """
     Download a shapefile from the given URL, unzip it, and convert it to a GeoDataFrame.
@@ -45,12 +53,8 @@ def download_and_convert_to_gdf(url, knots):
     
 def check_point(lat, lon, knots):
 
-    # Load the GeoDataFrame from NOAA
-    gdf = download_and_convert_to_gdf("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip", knots)
-  
+    gdf = gdfs[knots]
     point = Point(lon, lat)
-    
-    # Check if the point is within any shape in the dataframe
     contains_point = gdf[gdf.contains(point)]
     
     if not contains_point.empty:
