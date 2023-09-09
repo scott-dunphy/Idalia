@@ -4,4 +4,4 @@ shapely
 requests
 pydeck
 openpyxl
-streamlit_analytics
+streamlit-analytics
