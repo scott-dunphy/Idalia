@@ -116,9 +116,14 @@ def plot_map_with_hover(df):
 
     # Customize tooltip to show the property address and probability
     tooltip = {
-        "html": "<b>Address:</b> {Address} <br> <b>Probability:</b> {Probability}",
-        "style": {"backgroundColor": "steelblue", "color": "white"},
-    }
+    "html": """
+    <b>Address:</b> {Address} <br>
+    <b>Tropical Storm Force (>= 39mph):</b> {Tropical Storm Force (>= 39mph)} <br>
+    <b>>= 58 mph:</b> {>= 58 mph} <br>
+    <b>Hurricane Force (>= 74 mph):</b> {Hurricane Force (>= 74 mph)}
+    """,
+    "style": {"backgroundColor": "steelblue", "color": "white"},
+}
 
     r = pdk.Deck(
         layers=[layer],
