@@ -10,6 +10,7 @@ import requests
 import pandas as pd
 import pydeck as pdk
 import base64
+import streamlit_analytics
 
 def load_all_shapefiles(url):
     knot_values = ["34knt", "50knt", "64knt"]
@@ -137,6 +138,7 @@ def main():
     # Input box to accept a list of addresses
     addresses = st.text_area("Enter a list of addresses (each address on a separate line). Limit of 100.")
 
+    streamlit_analytics.start_tracking()
     if st.button("Process Addresses"):
         gdfs = load_all_shapefiles("https://www.nhc.noaa.gov/gis/forecast/archive/wsp_120hr5km_latest.zip")
         
@@ -180,7 +182,7 @@ def main():
         b64 = base64.b64encode(towrite.read()).decode()
         link = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="hurricane_data.xlsx">Download to Excel</a>'
         st.markdown(link, unsafe_allow_html=True)
-        
+        streamlit_analytics.stop_tracking()
 
         plot_map_with_hover(df)
 
