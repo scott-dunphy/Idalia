@@ -69,30 +69,14 @@ def check_point(lat, lon, knots, gdfs):
 import requests
 
 def address_to_lat_lon(address):
-    url = f"https://nominatim.openstreetmap.org/search?q={address}&format=jsonv2"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    # Set up retry strategy
-    retry_strategy = Retry(
-        total=5,
-        backoff_factor=1,
-        status_forcelist=[429, 500, 502, 503, 504],
-        allowed_methods=["HEAD", "GET", "OPTIONS"]
-    )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    http = requests.Session()
-    http.mount("https://", adapter)
-    http.mount("http://", adapter)
-
+    url = f"https://geocode.xyz/{address}?json=1"
     try:
-        response = http.get(url, headers=headers, timeout=10)
+        response = requests.get(url)
         response.raise_for_status()  # Raise an HTTPError for bad responses
         data = response.json()
-        if data:
-            lat = data[0]['lat']
-            lon = data[0]['lon']
+        if 'latt' in data and 'longt' in data:
+            lat = data['latt']
+            lon = data['longt']
             return float(lat), float(lon)
         else:
             st.warning(f"No data found for address: {address}")
