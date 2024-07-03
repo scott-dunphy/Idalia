@@ -11,7 +11,8 @@ import requests
 import pandas as pd
 import pydeck as pdk
 import base64
-
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 def load_all_shapefiles(url):
     knot_values = ["34knt", "50knt", "64knt"]
