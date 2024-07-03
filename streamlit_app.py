@@ -72,17 +72,32 @@ def address_to_lat_lon(address):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
+    
+    # Set up retry strategy
+    retry_strategy = Retry(
+        total=5,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        method_whitelist=["HEAD", "GET", "OPTIONS"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
+
+    try:
+        response = http.get(url, headers=headers, timeout=10)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         data = response.json()
         if data:
             lat = data[0]['lat']
             lon = data[0]['lon']
             return float(lat), float(lon)
         else:
+            st.warning(f"No data found for address: {address}")
             return None, None
-    else:
-        print(f"Error: Received response {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Request failed: {e}")
         return None, None
 
 
