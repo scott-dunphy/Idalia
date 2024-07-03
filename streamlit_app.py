@@ -1,3 +1,4 @@
+
 # streamlit_app.py
 
 import streamlit as st
@@ -64,20 +65,26 @@ def check_point(lat, lon, knots, gdfs):
         return 'Not Applicable'
 
 # Function to extract lat and lon from OpenStreetMap Nominatim API
+import requests
+
 def address_to_lat_lon(address):
-    base_url = "https://nominatim.openstreetmap.org/search.php"
-    params = {
-        "q": address,
-        "format": "jsonv2"
+    url = f"https://nominatim.openstreetmap.org/search?q={address}&format=jsonv2"
+    headers = {
+        'User-Agent': 'YourAppName/1.0 (your.email@example.com)'
     }
-    response = requests.get(base_url, params=params)
-    data = response.json()
-    if data:
-        lat = data[0]['lat']
-        lon = data[0]['lon']
-        return float(lat), float(lon)
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            lat = data[0]['lat']
+            lon = data[0]['lon']
+            return float(lat), float(lon)
+        else:
+            return None, None
     else:
+        print(f"Error: Received response {response.status_code}")
         return None, None
+
 
 def plot_map_with_hover(df):
     # Exclude assets with missing lat/lon values
